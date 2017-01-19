@@ -1,0 +1,146 @@
+1) Simply linked list
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct simpleList {
+    int data;
+
+    struct simpleList *next;
+};
+
+typedef struct simpleList simpleL;
+
+int main() {
+    int n, i;
+    scanf("%d", &n);
+
+    simpleL *head = (simpleL*) malloc(sizeof(simpleL));
+    simpleL *current = head;
+
+    for (i = 0; i < n; i++) {
+        scanf("%d", &(current -> data));
+
+        if (i < n - 1) {
+            current -> next = (simpleL*) malloc(sizeof(simpleL));
+            current = current -> next;
+        }
+
+        else {
+            current -> next = NULL;
+        }
+    }
+    
+    current = head;
+
+    while (current != NULL) {
+        printf("%d ", current -> data);
+        current = current -> next;
+    }
+
+    return 0;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+2) Double linked list
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct doubleList {
+    int data;
+
+    struct doubleList *next, *previous;
+};
+
+typedef struct doubleList doubleL;
+
+int main() {
+    int n, i;
+    scanf("%d", &n);
+
+    doubleL *head = (doubleL*) malloc(sizeof(doubleL));
+    head -> previous = NULL;
+
+    doubleL *current = head;
+
+    for (i = 0; i < n; i++) {
+        scanf("%d", &(current -> data));
+
+        if (i < n - 1) {
+            current -> next = (doubleL*) malloc(sizeof(doubleL));
+            current -> next -> previous = current;
+            current = current -> next;
+        }
+
+        else {
+            current -> next = NULL;
+        }
+    }
+   
+    current = head;
+
+    while (current -> next != NULL) {
+        printf("%d ", current -> data);
+        current = current -> next;
+    }
+
+    printf("%d\n", current -> data);
+
+    while (current != NULL) {
+        printf("%d ", current -> data);
+        current = current -> previous;
+    }
+
+    return 0;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+3) Circular list
+
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct circularList {
+    int data;
+
+    struct circularList *next;
+};
+
+typedef struct circularList circularL;
+
+int main() {
+    int n, i;
+    scanf("%d", &n);
+
+    circularL *head = (circularL*) malloc(sizeof(circularL));
+    circularL *current = head;
+
+    for (i = 0; i < n; i++) {
+        scanf("%d", &(current -> data));
+
+        if (i < n - 1) {
+            current -> next = (circularL*) malloc(sizeof(circularL));
+            current = current -> next;
+        }
+
+        else {
+            current -> next = head;
+        }
+    }
+
+    current = head;
+
+    while (current -> next != head) {
+        printf("%d ", current -> data);
+        current = current -> next;
+    }
+
+    printf("%d\n", current -> data);
+
+    return 0;
+}

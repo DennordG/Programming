@@ -1,0 +1,152 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct nod_lista {
+    int val;
+
+    struct nod_lista *next;
+};
+
+typedef struct nod_lista node;
+
+void addNode(node* *nod_curent, int x) {
+    (*nod_curent) -> next = (node*)malloc(sizeof(node));
+    (*nod_curent) = (*nod_curent) -> next;
+    (*nod_curent) -> val = x;
+    (*nod_curent) -> next = NULL;
+}
+
+node* getNth(node *head, int pos) {
+    int i;
+    node *nod_curent = head;
+
+    int x;
+    for (i = 0; i < pos; i++) {
+        nod_curent = nod_curent -> next;
+    }
+
+    return nod_curent;
+}
+
+struct head_tail {
+    node *head, *tail;
+};
+
+struct head_tail Merge(node* head1, int nr1, node* head2, int nr2) {
+    node* head3 = (node*)malloc(sizeof(node));
+
+    node* nod1 = head1;
+    node* nod2 = head2;
+    node* nod3 = head3;
+
+    if (nod1 -> val < nod2 -> val) {
+        nod3 -> val = nod1 -> val;
+        nod1 = nod1 -> next;
+        nr1--;
+    }
+    else {
+        nod3 -> val = nod2 -> val;
+        nod2 = nod2 -> next;
+        nr2--;
+    }
+    nod3 -> next = NULL;
+
+    while (nr1 > 0 && nr2 > 0) {
+        if (nod1 -> val < nod2 -> val) {
+            addNode(&nod3, nod1 -> val);
+            nod1 = nod1 -> next;
+            nr1--;
+        }
+        else {
+            addNode(&nod3, nod2 -> val);
+            nod2 = nod2 -> next;
+            nr2--;
+        }
+    }
+
+    while (nr1 > 0) {
+        addNode(&nod3, nod1 -> val);
+        nod1 = nod1 -> next;
+        nr1--;
+    }
+
+    while (nr2 > 0) {
+        addNode(&nod3, nod2 -> val);
+        nod2 = nod2 -> next;
+        nr2--;
+    }
+
+    node* tail3 = nod3;
+
+    struct head_tail result;
+    result.head = head3;
+    result.tail = tail3;
+    return result;
+}
+
+void MergeSort(node* *head, int left, int right) {
+    int mid = (left + right) / 2;
+    int nrOfElements = right - left + 1;
+
+    if (nrOfElements == 1) {
+        return;
+    }
+
+    MergeSort(&(*head), left, mid);
+    MergeSort(&(*head), mid + 1, right);
+
+    int nrFirstHalf = mid - left + 1;
+    int nrSecondHalf = nrOfElements - nrFirstHalf;
+    struct head_tail newList = Merge(getNth(*head, left), nrFirstHalf, getNth(*head, mid + 1), nrSecondHalf);
+
+    /*DEBUG
+    int x = newList.head -> val;
+    int y = newList.tail -> val;
+    node* nod_curent = newList.head;
+    while (nod_curent != NULL) {
+        printf("%d ", nod_curent -> val);
+        nod_curent = nod_curent -> next;
+    }
+    printf("\n");
+    */
+
+    newList.tail -> next = getNth(*head, right + 1);
+
+    if (left - 1 >= 0) {
+        getNth(*head, left - 1) -> next = newList.head;
+    }
+    else {
+        *head = newList.head;
+    }
+
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    int x;
+    scanf("%d", &x);
+
+    node *head = (node*)malloc(sizeof(node));
+    head -> val = x;
+    head -> next = NULL;
+
+    node *nod_curent = head;
+
+    int i;
+    for (i = 1; i < n; i++) {
+        scanf("%d", &x);
+        addNode(&nod_curent, x);
+    }
+
+    MergeSort(&head, 0, n - 1);
+
+    nod_curent = head;
+    while (nod_curent != NULL) {
+        printf("%d ", nod_curent -> val);
+        nod_curent = nod_curent -> next;
+    }
+
+    return 0;
+}

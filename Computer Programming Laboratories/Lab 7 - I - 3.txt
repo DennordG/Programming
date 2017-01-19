@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct simpleList {
+    char data;
+
+    struct simpleList *next;
+};
+
+typedef struct simpleList simpleL;
+
+void concatenate(simpleL *firstHead, simpleL *secondHead) {
+    while (firstHead -> next != NULL) {
+        firstHead = firstHead -> next;
+    }
+
+    firstHead -> next = secondHead;
+}
+
+int main() {
+    int i;
+
+    char *s = malloc(20 * sizeof(char));
+    gets(s);
+
+    simpleL *firstListHead = (simpleL*) malloc(sizeof(simpleL));
+    simpleL *current = firstListHead;
+
+    for (i = 0; s[i] != '\0'; i++) {
+        current -> data = s[i];
+
+        if (s[i + 1] != '\0') {
+            current -> next = (simpleL*) malloc(sizeof(simpleL));
+            current = current -> next;
+        }
+        else {
+            current -> next = NULL;
+        }
+    }
+
+    gets(s);
+
+    simpleL *secondListHead = (simpleL*) malloc(sizeof(simpleL));
+    current = secondListHead;
+
+    for (i = 0; s[i] != '\0'; i++) {
+        current -> data = s[i];
+
+        if (s[i + 1] != '\0') {
+            current -> next = (simpleL*) malloc(sizeof(simpleL));
+            current = current -> next;
+        }
+        else {
+            current -> next = NULL;
+        }
+    }
+
+    simpleL *auxFirstListHead = firstListHead;
+    concatenate(auxFirstListHead, secondListHead);
+
+    current = firstListHead;
+
+    while (current != NULL) {
+        printf("%c", current -> data);
+        current = current -> next;
+    }
+
+    return 0;
+}

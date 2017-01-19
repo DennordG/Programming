@@ -1,0 +1,107 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct simpleList {
+    int data;
+
+    struct simpleList *next;
+};
+
+typedef struct simpleList simpleL;
+
+simpleL* merge(simpleL* firstHead, simpleL* secondHead) {
+    simpleL* result = (simpleL*) malloc(sizeof(simpleL));
+    simpleL* current = result;
+
+    while (firstHead != NULL && secondHead != NULL) {
+        if (firstHead -> data < secondHead -> data) {
+            current -> data = firstHead -> data;
+            firstHead = firstHead -> next;
+        }
+        else {
+            current -> data = secondHead -> data;
+            secondHead = secondHead -> next;
+        }
+
+        current -> next = (simpleL*) malloc(sizeof(simpleL));
+        current = current -> next;
+    }
+
+    while (firstHead != NULL) {
+        current -> data = firstHead -> data;
+
+        if (firstHead -> next != NULL) {
+            current -> next = (simpleL*) malloc(sizeof(simpleL));
+            current = current -> next;
+        }
+        else {
+            current -> next = NULL;
+        }
+
+        firstHead = firstHead -> next;
+    }
+
+    while (secondHead != NULL) {
+        current -> data = secondHead -> data;
+
+        if (secondHead -> next != NULL) {
+            current -> next = (simpleL*) malloc(sizeof(simpleL));
+            current = current -> next;
+        }
+        else {
+            current -> next = NULL;
+        }
+
+        secondHead = secondHead -> next;
+    }
+
+    return result;
+}
+
+int main() {
+    int n, i;
+    scanf("%d", &n);
+
+    simpleL* firstListHead = (simpleL*) malloc(sizeof(simpleL));
+    simpleL* secondListHead = (simpleL*) malloc(sizeof(simpleL));
+
+    simpleL* current = firstListHead;
+
+    for (i = 0; i < n; i++) {
+        scanf("%d", &(current -> data));
+
+        if (i < n - 1) {
+            current -> next = (simpleL*) malloc(sizeof(simpleL));
+            current = current -> next;
+        }
+        else {
+            current -> next = NULL;
+        }
+    }
+
+    current = secondListHead;
+
+    for (i = 0; i < n; i++) {
+        scanf("%d", &(current -> data));
+
+        if (i < n - 1) {
+            current -> next = (simpleL*) malloc(sizeof(simpleL));
+            current = current -> next;
+        }
+        else {
+            current -> next = NULL;
+        }
+    }
+
+    simpleL* mergedLists = merge(firstListHead, secondListHead);
+
+    current = mergedLists;
+
+    while (current != NULL) {
+        printf("%d ", current -> data);
+        current = current -> next;
+    }
+
+    return 0;
+}
