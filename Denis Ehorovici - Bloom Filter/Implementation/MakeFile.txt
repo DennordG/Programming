@@ -1,0 +1,19 @@
+CC=gcc
+
+# -c = compilation
+# -Wall = throws all warnings
+CFLAGS=-c -Wall
+
+all: run
+
+run: main.o functions.o
+	$(CC) main.o functions.o -o run
+
+main.o: main.c
+	$(CC) $(CFLAGS) main.c
+
+function.o: functions.c
+	$(CC) $(CFLAGS) functions.c
+
+clean:
+	rm *o run
